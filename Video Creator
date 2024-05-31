@@ -1,0 +1,71 @@
+import cv2
+
+import os
+
+from PIL import Image
+
+os.chdir("C:\\Users\\edvar\\OneDrive\\Desktop\\OpenCV\\Collage")
+
+path = ("C:\\Users\\edvar\\OneDrive\\Desktop\\OpenCV\\Collage")
+
+height = 0
+
+width = 0
+
+numimg = len(os.listdir('.'))
+
+print(numimg)
+
+for i in os.listdir('.'):
+    img = Image.open(os.path.join(path,i))
+
+    owidth,oheight = img.size
+
+    width = owidth+width
+    height = oheight+height
+
+mwidth = width//numimg
+
+mheight = height//numimg
+
+for i in os.listdir('.'):
+    if i.endswith('.jpg') or i.endswith('jpeg') or i.endswith('png'):
+         img = Image.open(os.path.join(path,i))
+
+         owidth,oheight = img.size
+
+
+         resizedimg = img.resize((mwidth,mheight)) 
+        
+         resizedimg.save(i,"JPEG",quality = 95)
+
+         print(img.filename.split('\\')[-1], "is resized")
+
+def vid_maker():
+    videoname = "Image Combination.avi"
+
+    os.chdir("C:\\Users\\edvar\\OneDrive\\Desktop\\OpenCV\\Collage")
+
+    videoimg = []
+
+    for i in os.listdir('.'):
+     if i.endswith('.jpg') or i.endswith('jpeg') or i.endswith('png'):
+         videoimg.append(i)   
+    print(videoimg)
+
+    frame = cv2.imread(os.path.join('.',videoimg[0]))
+ 
+    height,width,layers = frame.shape
+
+    vid = cv2.VideoWriter(videoname,0,1,(width,height))
+
+    for image in videoimg:
+        vid.write(cv2.imread(os.path.join('.',image)))
+    cv2.destroyAllWindows()
+    vid.release()
+vid_maker()
+
+
+
+
+
