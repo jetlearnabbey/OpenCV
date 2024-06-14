@@ -1,0 +1,42 @@
+import cv2
+
+import numpy as np
+
+image = cv2.imread("morph image.jpg")
+
+imagehsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+lowered1 =  np.array([0,40,40])
+
+lowered2 = np.array([0,255,255])
+
+mask1 = cv2.inRange(imagehsv, lowered1, lowered2)
+
+highred1 =  np.array([120,40,40])
+
+highred2 = np.array([180,255,255])
+
+mask2 = cv2.inRange(imagehsv, highred1,highred2)
+
+finalmask = mask1+mask2
+
+finalmask = cv2.morphologyEx(finalmask,cv2.MORPH_OPEN,np.ones((3,3),np.uint8),iterations=2)
+
+finalmask  = cv2.dilate(finalmask,np.ones((3,3),np.uint8),iterations=1)
+
+finalmask = cv2.bitwise_not(finalmask)
+
+cv2.imshow("Morphed Image",mask1)
+
+
+cv2.waitKey(0)
+
+cv2.imshow("Morphed Image",mask2)
+
+cv2.waitKey(0)
+
+cv2.imshow("Morphed Image",finalmask)
+
+cv2.waitKey(0)
+
+cv2.destroyAllWindows()
