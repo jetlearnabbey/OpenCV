@@ -1,0 +1,53 @@
+import cv2
+
+import os
+
+haar_file = "haarcasade_frontalface_default.xml"
+
+datasets = "Pictures"
+
+subdata = "Edvard"
+
+path = os.path.join(datasets,subdata)
+
+if not os.path.isdir(path):
+
+    os.mkdir(path)
+#defining the size of the images
+width,height = 130,100
+
+face_cascade = cv2.CascadeClassifier(haar_file)
+
+webcam = cv2.VideoCapture(0)
+
+#program loops until it has 20 images of my face
+
+count = 1
+
+while count<=20:
+    ret,imgs = webcam.read()
+    grey = cv2.cvtColor(imgs, cv2.COLOR_BGR2GRAY)
+
+    faces = face_cascade.detectMultiScale(grey,1.3,4)
+
+    for (x,y,w,h) in faces:
+        cv2.rectangle(imgs,(x,y),(x+w,y+h),(288,8,10),2)
+
+        face = grey[y:y+h,x:x+w]
+
+        face_resize = cv2.resize(face,(width,height))
+
+        cv2.imwrite("%5/%5.png"%(path,count),face_resize)
+
+    count+=1
+    cv2.imshow('OpenCV',imgs)
+    k = cv2.waitKey(10)
+    if k == 27:
+       break
+
+
+
+
+
+
+
